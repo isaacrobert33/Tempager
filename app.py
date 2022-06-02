@@ -191,11 +191,3 @@ def template(template_id):
                 'error': str(e)
                 }), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
-r = get("http://127.0.0.1:5000/register", headers=headers, data={'first_name': 'Isaac','last_name': 'Robert', 'email': 'isaac@gmail.com','password': '123456'})
-
-
-
