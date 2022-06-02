@@ -11,6 +11,7 @@ api = Api(app)
 os.environ['SECRET_KEY'] = 'ayowumi33'
 SECRET_KEY = os.environ['SECRET_KEY']
 app.config['SECRET_KEY'] = SECRET_KEY
+app.config['DEBUG'] = True
 
 def validate_email_and_password(email, password):
     if "@" not in email and "." not in email:
