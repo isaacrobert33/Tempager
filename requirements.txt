@@ -1,0 +1,6 @@
+Flask
+gunicorn
+pymongo==4.1.1
+dnspython==2.2.1
+urllib
+requests
