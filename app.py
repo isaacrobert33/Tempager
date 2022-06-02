@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_restful import Resource, Api
 from flask import request, jsonify
 from auth_middleware import token_required
 from models import User, Templates
@@ -7,7 +6,6 @@ import os, sys, json
 
 
 app = Flask(__name__)
-api = Api(app)
 os.environ['SECRET_KEY'] = 'ayowumi33'
 SECRET_KEY = os.environ['SECRET_KEY']
 app.config['SECRET_KEY'] = SECRET_KEY
