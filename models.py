@@ -90,11 +90,11 @@ class User:
         if not user or not check_password_hash(user["password"], password):
             return
         user.pop("password")
-        user["token"] = jwt.encode(
+        user["token"] = str(jwt.encode(
                     {"user_id": user["_id"]},
                     app.config['SECRET_KEY'],
                     algorithm="HS256"
-                    ).decode('utf-8')
+                    ))
         self.set_account_status(user['_id'], True)
 
         return user
