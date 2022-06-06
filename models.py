@@ -58,9 +58,11 @@ class Templates:
     def update(self, data):
         if not self.get_by_id(data['_id']):
             return
+        ndata = data
+        ndata.pop("_id")
         template = db.templates.update_one(
             {'template_name': data['template_name']},
-            {'$set': data}
+            {'$set': ndata}
         )
         return self.get_by_id(data['_id'])
 
