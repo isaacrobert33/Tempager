@@ -50,6 +50,8 @@ class Templates:
 
     def get_by_name(self, template_name):
         template = db.templates.find_one({'template_name': template_name})
+        if not template:
+            return
         template['_id'] = str(template['_id'])
         return template
 
