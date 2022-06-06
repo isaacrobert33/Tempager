@@ -6,8 +6,8 @@ import os, sys, json
 
 
 app = Flask(__name__)
-os.environ['SECRET_KEY'] = 'ayowumi33'
-SECRET_KEY = os.environ['SECRET_KEY']
+
+SECRET_KEY = "robertix"
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['DEBUG'] = True
 
@@ -28,15 +28,15 @@ def register():
             print(data)
         except Exception as e:
             return jsonify({'message': 'error', 'error': str(e)}), 500
-        
+
         if not data:
             return jsonify({
-                'message': 'Please provide user details', 
+                'message': 'Please provide user details',
                 'data': None,
                 'error': 'bad request'}), 400
-                
+
         is_valid = validate_email_and_password(data["email"], data["password"])
-        
+
         if type(is_valid) == dict:
 
             return jsonify({
@@ -44,7 +44,7 @@ def register():
                 "data": None,
                 "error": is_vaild}
                 ), 400
-            
+
         new_user = User().register(data)
         if not new_user:
             return jsonify(
@@ -64,23 +64,24 @@ def register():
             'error': str(e)
             }), 500
 
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
     try:
         credentials = request.json
+        print(credentials)
         if not credentials:
             return jsonify({
-                'message': 'Please provide user details', 
+                'message': 'Please provide user details',
                 'data': None,
                 'error': 'bad request'}), 400
         logged = User().login(
             credentials["email"],
             credentials["password"])
-        
+        print(logged)
         if not logged:
             return jsonify({"message": "Invalid login!"}), 401
-        
-        return jsonify({"message": "Successfully fetched auth token!", "data": logged})
+
+        return jsonify({"message": "Successfully fetched auth token!", "data": str(logged)})
     except Exception as e:
         return jsonify(
             {
@@ -89,32 +90,20 @@ def login():
             'error': str(e)
             }), 500
 
-@app.route('/template/<string:template_id>',  methods=['POST', 'GET', 'PUT', 'DELETE'])
+
+@app.route("/template", methods=["POST", "GET"])
 @token_required
-def template(template_id):
+def insert_template(c_user=None, *args, **kwargs):
     if request.method == 'GET':
         try:
-            if template_id == 'all':
-                # Get all templates
-                templates = Templates().get_all()
-                return jsonify(
-                    {
-                    "message": 'Retieved all templates successfully', 
-                    'data': templates}
-                    ), 201
-            else:
-                # Get a single template
-                template = Templates().get_by_id(template_id)
-                if not template:
-                    return jsonify(
-                        {
-                        "message": "Template does not exists!",
-                        "data": None,
-                        "error": "bad request"
-                        }), 400
-                        
-                return jsonify(
-                    {'message': 'Template retrieved!', 'data': template})
+            # Get all templates
+            templates = Templates().get_all()
+            return jsonify(
+                {
+                "message": 'Retieved all templates successfully',
+                'data': templates}
+                ), 201
+
         except Exception as e:
             return jsonify(
                 {
@@ -123,8 +112,16 @@ def template(template_id):
                 'error': str(e)
                 }), 500
     elif request.method == 'POST':
+        # Create New
         try:
             data = request.json
+            print(data)
+            if not data:
+                return jsonify({
+                'message': 'Please provide user details',
+                'data': None,
+                'error': 'bad request'}), 400
+
             new_template = Templates().create_new(data)
             if not new_template:
                 return jsonify(
@@ -142,8 +139,39 @@ def template(template_id):
                 'data': None,
                 'error': str(e)
                 }), 500
-    elif request.method == 'PUT':
+
+@app.route('/template/<string:template_id>',  methods=['POST', 'GET', 'PUT', 'DELETE'])
+@token_required
+def template(template_id):
+    print(template_id)
+    if request.method == 'GET':
         try:
+
+            # Get a single template
+            template = Templates().get_by_id(template_id)
+            if not template:
+                return jsonify(
+                    {
+                    "message": "Template does not exists!",
+                    "data": None,
+                    "error": "bad request"
+                    }), 400
+
+            return jsonify(
+                {'message': 'Template retrieved!', 'data': template})
+        except Exception as e:
+            return jsonify(
+                {
+                'message': 'Internal server error!',
+                'data': None,
+                'error': str(e)
+                }), 500
+
+    elif request.method == 'PUT':
+        # Update template
+        try:
+            data = request.json
+            print(data)
             old_template = Templates().update(data)
             if not old_template:
                 return jsonify(
@@ -166,6 +194,7 @@ def template(template_id):
                 'data': None,
                 'error': str(e)
                 }), 500
+
     elif request.method == 'DELETE':
         try:
             template = Templates().delete(template_id)
@@ -180,7 +209,7 @@ def template(template_id):
             return jsonify(
                 {
                     "message": "Successfully deleted template!",
-                    "data": template
+                    "data": None
                 }), 201
         except Exception as e:
             return jsonify(
@@ -189,4 +218,10 @@ def template(template_id):
                 'data': None,
                 'error': str(e)
                 }), 500
+
+if __name__ == '__main__':
+     app.run()
+
+
+
 
