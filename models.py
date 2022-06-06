@@ -56,15 +56,15 @@ class Templates:
         return template
 
     def update(self, data):
-        if not self.get_by_id(data['_id']):
+        _id = data["_id"]
+        if not self.get_by_id(_id):
             return
-        ndata = data
-        ndata.pop("_id")
+        data.pop("_id")
         template = db.templates.update_one(
             {'template_name': data['template_name']},
-            {'$set': ndata}
+            {'$set': data}
         )
-        return self.get_by_id(data['_id'])
+        return self.get_by_id(_id)
 
     def delete(self, template_id):
         if not self.get_by_id(template_id):
