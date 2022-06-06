@@ -62,7 +62,7 @@ class Templates:
             {'template_name': data['template_name']},
             {'$set': data}
         )
-        return self.get_by_name(data['template_name'])
+        return self.get_by_id(data['_id'])
 
     def delete(self, template_id):
         if not self.get_by_id(template_id):
