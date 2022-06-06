@@ -172,6 +172,7 @@ def template(template_id):
         try:
             data = request.json
             print(data)
+            data["_id"] = template_id
             old_template = Templates().update(data)
             if not old_template:
                 return jsonify(
