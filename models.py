@@ -56,7 +56,7 @@ class Templates:
         return template
 
     def update(self, data):
-        if not self.get_by_name(data['template_name']):
+        if not self.get_by_id(data['_id']):
             return
         template = db.templates.update_one(
             {'template_name': data['template_name']},
