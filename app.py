@@ -93,11 +93,12 @@ def login():
 
 @app.route("/template", methods=["POST", "GET"])
 @token_required
-def insert_template(c_user=None, *args, **kwargs):
+def insert_template(*args, **kwargs):
+    token = request.headers["Authorization"].split(" ")[1]
     if request.method == 'GET':
         try:
             # Get all templates
-            templates = Templates().get_all()
+            templates = Templates().get_all(token)
             return jsonify(
                 {
                 "message": 'Retieved all templates successfully',
@@ -122,7 +123,7 @@ def insert_template(c_user=None, *args, **kwargs):
                 'data': None,
                 'error': 'bad request'}), 400
 
-            new_template = Templates().create_new(data)
+            new_template = Templates().create_new(data, token)
             if not new_template:
                 return jsonify(
                     {
@@ -144,11 +145,12 @@ def insert_template(c_user=None, *args, **kwargs):
 @token_required
 def template(template_id):
     print(template_id)
+    token = request.headers["Authorization"].split(" ")[1]
     if request.method == 'GET':
         try:
 
             # Get a single template
-            template = Templates().get_by_id(template_id)
+            template = Templates().get_by_id(template_id, token)
             if not template:
                 return jsonify(
                     {
@@ -173,7 +175,7 @@ def template(template_id):
             data = request.json
             print(data)
             data["_id"] = template_id
-            old_template = Templates().update(data)
+            old_template = Templates().update(data, token)
             if not old_template:
                 return jsonify(
                     {
@@ -198,7 +200,7 @@ def template(template_id):
 
     elif request.method == 'DELETE':
         try:
-            template = Templates().delete(template_id)
+            template = Templates().delete(template_id, token)
             if not template:
                 return jsonify(
                     {

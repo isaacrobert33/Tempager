@@ -17,7 +17,6 @@ db = client.db
 print("[*] connection to mongodb established successfully...")
 
 
-
 def validate_template(data):
     kwd = ["template_name", "subject", "body"]
     for i in kwd:
@@ -30,34 +29,37 @@ class Templates:
     def __init__(self):
         pass
 
-    def create_new(self, template_data):
+    def create_new(self, template_data, token):
         is_valid = validate_template(template_data)
         if not is_valid:
             return
+        template_data["access"] = token
         new_template = db.templates.insert_one(template_data)
         return self.get_by_id(new_template.inserted_id)
 
-    def get_all(self):
-        templates = db.templates.find({})
+    def get_all(self, token):
+        templates = db.templates.find({'access': token})
         return [{**template, "_id": str(template['_id'])} for template in templates]
 
-    def get_by_id(self, template_id):
-        template = db.templates.find_one({'_id': bson.ObjectId(template_id)})
+    def get_by_id(self, template_id, token):
+        template = db.templates.find_one({'_id': bson.ObjectId(template_id), 'access': token})
         if not template:
             return
         template['_id'] = str(template['_id'])
+        template.pop("access")
         return template
 
-    def get_by_name(self, template_name):
+    def get_by_name(self, template_name, token):
         template = db.templates.find_one({'template_name': template_name})
         if not template:
             return
         template['_id'] = str(template['_id'])
+        template.pop("access")
         return template
 
-    def update(self, data):
+    def update(self, data, token):
         _id = data["_id"]
-        if not self.get_by_id(_id):
+        if not self.get_by_id(_id, token):
             return
         data.pop("_id")
         template = db.templates.update_one(
@@ -66,8 +68,8 @@ class Templates:
         )
         return self.get_by_id(_id)
 
-    def delete(self, template_id):
-        if not self.get_by_id(template_id):
+    def delete(self, template_id, token):
+        if not self.get_by_id(template_id, token):
             return
         template = db.templates.delete_one({'_id': bson.ObjectId(template_id)})
         return template
