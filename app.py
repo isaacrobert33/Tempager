@@ -99,6 +99,12 @@ def insert_template(*args, **kwargs):
         try:
             # Get all templates
             templates = Templates().get_all(token)
+            if not templates:
+                return jsonify(
+                    {
+                    "message": "No templates available!",
+                    "data": templates,
+                    }), 404
             return jsonify(
                 {
                 "message": 'Retieved all templates successfully',
