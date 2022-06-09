@@ -35,7 +35,7 @@ class Templates:
             return
         template_data["access"] = token
         new_template = db.templates.insert_one(template_data)
-        return self.get_by_id(new_template.inserted_id)
+        return self.get_by_id(new_template.inserted_id, token)
 
     def get_all(self, token):
         templates = db.templates.find({'access': token})
