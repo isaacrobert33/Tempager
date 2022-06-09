@@ -39,7 +39,7 @@ class Templates:
 
     def get_all(self, token):
         templates = db.templates.find({'access': token})
-        
+
         return [{**template, "_id": str(template['_id'])} for template in templates]
 
     def get_by_id(self, template_id, token):
@@ -64,7 +64,7 @@ class Templates:
             return
         data.pop("_id")
         template = db.templates.update_one(
-            {'template_name': data['template_name']},
+            {'template_name': data['template_name'], 'access': token},
             {'$set': data}
         )
         return self.get_by_id(_id)
@@ -72,7 +72,7 @@ class Templates:
     def delete(self, template_id, token):
         if not self.get_by_id(template_id, token):
             return
-        template = db.templates.delete_one({'_id': bson.ObjectId(template_id)})
+        template = db.templates.delete_one({'_id': bson.ObjectId(template_id), 'access': token})
         return template
 
 

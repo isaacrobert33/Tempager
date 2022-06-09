@@ -204,7 +204,7 @@ def template(template_id):
                 'error': str(e)
                 }), 500
 
-    elif request.method == 'DELETE':
+    elif request.method == "DELETE":
         try:
             template = Templates().delete(template_id, token)
             if not template:
