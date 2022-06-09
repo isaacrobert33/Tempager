@@ -87,7 +87,7 @@ class User:
         if self.get_by_email(data["email"]):
             return
 
-        data["active"] = True
+        data["active"] = False
         data["password"] = self.encrypt_password(data["password"])
         new_user = db.users.insert_one(data)
         self.set_account_status(new_user.inserted_id, True)
