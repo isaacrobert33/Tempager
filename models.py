@@ -67,7 +67,7 @@ class Templates:
             {'template_name': data['template_name'], 'access': token},
             {'$set': data}
         )
-        return self.get_by_id(_id)
+        return self.get_by_id(_id, token)
 
     def delete(self, template_id, token):
         if not self.get_by_id(template_id, token):
