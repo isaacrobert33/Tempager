@@ -64,7 +64,7 @@ class Templates:
             return
         data.pop("_id")
         template = db.templates.update_one(
-            {'template_name': data['template_name'], 'access': token},
+            {'_id': bson.ObjectId(_id), 'access': token},
             {'$set': data}
         )
         return self.get_by_id(_id, token)
