@@ -1,3 +1,5 @@
+# Author: Isaac Robert
+
 from flask import Flask
 from flask import request, jsonify
 from auth_middleware import token_required

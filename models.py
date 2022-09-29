@@ -1,3 +1,5 @@
+# Author: Isaac Robert
+
 from pymongo import MongoClient
 from flask import current_app as app
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -136,7 +138,5 @@ class User:
             return
         user['_id'] = str(user['_id'])
         return user
-
-
 
 

@@ -1,3 +1,5 @@
+# Author: Isaac Robert
+
 from functools import wraps
 import jwt
 from flask import request, abort
