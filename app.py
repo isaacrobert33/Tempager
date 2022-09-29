@@ -22,10 +22,10 @@ def validate_email_and_password(email, password):
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     try:
-        print(request.method)
+       
         try:
             data = request.json
-            print(data)
+    
         except Exception as e:
             return jsonify({'message': 'error', 'error': str(e)}), 500
 
@@ -42,7 +42,7 @@ def register():
             return jsonify({
                 "message": "Invalid sign-up details",
                 "data": None,
-                "error": is_vaild}
+                "error": is_valid}
                 ), 400
 
         new_user = User().register(data)
@@ -68,7 +68,7 @@ def register():
 def login():
     try:
         credentials = request.json
-        print(credentials)
+ 
         if not credentials:
             return jsonify({
                 'message': 'Please provide user details',
@@ -77,7 +77,7 @@ def login():
         logged = User().login(
             credentials["email"],
             credentials["password"])
-        print(logged)
+     
         if not logged:
             return jsonify({"message": "Invalid login!"}), 401
 
@@ -122,7 +122,7 @@ def insert_template(*args, **kwargs):
         # Create New
         try:
             data = request.json
-            print(data)
+
             if not data:
                 return jsonify({
                 'message': 'Please provide user details',
@@ -179,7 +179,7 @@ def template(template_id):
         # Update template
         try:
             data = request.json
-            print(data)
+
             data["_id"] = template_id
             old_template = Templates().update(data, token)
             if not old_template:
