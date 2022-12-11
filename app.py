@@ -2,11 +2,11 @@
 
 from flask import Flask
 from flask import request, jsonify
-from auth_middleware import token_required
-from models import User, Templates
+from middleware.auth_middleware import token_required
+from models.models import User, Templates
 import os, sys, json
 
-
+# initialize flask app instance
 app = Flask(__name__)
 
 SECRET_KEY = "robertix"
