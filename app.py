@@ -14,6 +14,10 @@ app.config['SECRET_KEY'] = SECRET_KEY
 app.config['DEBUG'] = True
 
 def validate_email_and_password(email, password):
+    """
+    Validate emails and passwords
+    >>> validate_email_and_password(emails, password) -> bool
+    """
     if "@" not in email and "." not in email:
         return {"email": "invalid"}
     if len(password) < 6:
