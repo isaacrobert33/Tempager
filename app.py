@@ -2,8 +2,8 @@
 
 from flask import Flask
 from flask import request, jsonify
-from auth_middleware import token_required
-from models import User, Templates
+from middleware.auth_middleware import token_required
+from models.models import User, Templates
 import os, sys, json
 
 
